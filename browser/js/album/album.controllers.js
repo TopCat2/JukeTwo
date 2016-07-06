@@ -1,6 +1,7 @@
 'use strict';
 
-juke.controller('AlbumCtrl', function ($scope, $rootScope, $log, StatsFactory, AlbumFactory, PlayerFactory) {
+juke.controller('AlbumCtrl', function ($scope, $rootScope, $log, 
+    StatsFactory, AlbumFactory, PlayerFactory) {
 
   // load our initial data
   AlbumFactory.fetchAll()
@@ -23,29 +24,19 @@ juke.controller('AlbumCtrl', function ($scope, $rootScope, $log, StatsFactory, A
 
   // main toggle
   $scope.toggle = function (song) {
-    if ($scope.playing && song === $scope.currentSong) {
-      $rootScope.$broadcast('pause');
-    } else $rootScope.$broadcast('play', song);
+    if (PlayerFactory.isPlaying() && song === PlayerFactory.getCurrentSong()) {
+      PlayerFactory.pause();
+    } else {
+      PlayerFactory.start(song, $scope.album.songs);
+    }
   };
-
-  // incoming events (from Player, toggle, or skip)
-
-
-  // functionality
-  function pause () {
-    $scope.playing = false;
+  $scope.currentSong = function() {
+    return PlayerFactory.getCurrentSong();
   }
-  function play (event, song) {
-    $scope.playing = true;
-    $scope.currentSong = song;
+
+  $scope.playing = function() {
+    return PlayerFactory.isPlaying();
   };
 
-  // a "true" modulo that wraps negative to the top of the range
-
-
-  // jump `interval` spots in album (negative to go back, default +1)
-
-  function next () { skip(1); };
-  function prev () { skip(-1); };
 
 });

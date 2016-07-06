@@ -16,7 +16,7 @@ juke.factory('PlayerFactory', function($http) {
         audio.play();
         currentlyPlaying = true;
         currentSong = song;
-        currentAlbumSongs = songList;
+        if (songList) currentAlbumSongs = songList;
     };
 
     returnObj.pause = function() {
@@ -45,7 +45,7 @@ juke.factory('PlayerFactory', function($http) {
         var index = currentAlbumSongs.indexOf(currentSong);
         index = mod((index + (interval || 1)), currentAlbumSongs.length);
         currentSong = currentAlbumSongs[index];
-        returnObj.start(currentSong, currentAlbumSongs);
+        returnObj.start(currentSong);
     }
 
     returnObj.next = function() {

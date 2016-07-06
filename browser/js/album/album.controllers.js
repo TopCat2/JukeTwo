@@ -1,6 +1,6 @@
 'use strict';
 
-juke.controller('AlbumCtrl', function ($scope, $rootScope, $log, StatsFactory, AlbumFactory) {
+juke.controller('AlbumCtrl', function ($scope, $rootScope, $log, StatsFactory, AlbumFactory, PlayerFactory) {
 
   // load our initial data
   AlbumFactory.fetchAll()
@@ -29,10 +29,7 @@ juke.controller('AlbumCtrl', function ($scope, $rootScope, $log, StatsFactory, A
   };
 
   // incoming events (from Player, toggle, or skip)
-  $scope.$on('pause', pause);
-  $scope.$on('play', play);
-  $scope.$on('next', next);
-  $scope.$on('prev', prev);
+
 
   // functionality
   function pause () {

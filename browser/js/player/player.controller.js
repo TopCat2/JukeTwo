@@ -16,40 +16,44 @@ juke.controller('PlayerCtrl', function ($scope, $rootScope) {
   });
 
   // state
-  $scope.currentSong;
-  $scope.playing = false;
+  $scope.currentSong = function() {
+    return PlayerFactory.getCurrentSong();
+  }
+
+  $scope.playing = function() {
+    return PlayerFactory.isPlaying();
+  };
 
   // main toggle
   $scope.toggle = function (song) {
-    if ($scope.playing) $rootScope.$broadcast('pause');
-    else $rootScope.$broadcast('play', song);
+    if (PlayerFactory.isPlaying()) PlayerFactory.pause();
+    else PlayerFactory.start(song);
   };
 
   // incoming events (from Album or toggle)
-  $scope.$on('pause', pause);
-  $scope.$on('play', play);
+
 
   // functionality
-  function pause () {
-    audio.pause();
-    $scope.playing = false;
-  }
-  function play (event, song){
-    // stop existing audio (e.g. other song) in any case
-    pause();
-    $scope.playing = true;
-    // resume current song
-    if (song === $scope.currentSong) return audio.play();
-    // enable loading new song
-    $scope.currentSong = song;
-    audio.src = song.audioUrl;
-    audio.load();
-    audio.play();
-  }
+  // function pause () {
+  //   audio.pause();
+  //   $scope.playing = false;
+  // }
+  // function play (event, song){
+  //   // stop existing audio (e.g. other song) in any case
+  //   pause();
+  //   $scope.playing = true;
+  //   // resume current song
+  //   if (song === $scope.currentSong) return audio.play();
+  //   // enable loading new song
+  //   $scope.currentSong = song;
+  //   audio.src = song.audioUrl;
+  //   audio.load();
+  //   audio.play();
+  // }
 
-  // outgoing events (to Album… or potentially other characters)
-  $scope.next = function () { pause(); $rootScope.$broadcast('next'); };
-  $scope.prev = function () { pause(); $rootScope.$broadcast('prev'); };
+  // // outgoing events (to Album… or potentially other characters)
+  $scope.next = function () { return PlayerFactory.next() };
+  $scope.prev = function () { return PlayerFactory.previous() };
 
   function seek (decimal) {
     audio.currentTime = audio.duration * decimal;

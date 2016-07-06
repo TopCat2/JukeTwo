@@ -1,6 +1,27 @@
 'use strict';
 
-juke.controller('AlbumCtrl', function ($scope, $http, $rootScope, $log) {
+juke.factory('StatsFactory', function ($q) {
+  var statsObj = {};
+  statsObj.totalTime = function (album) {
+    var audio = document.createElement('audio');
+    return $q(function (resolve, reject) {
+      var sum = 0;
+      var n = 0;
+      function resolveOrRecur () {
+        if (n >= album.songs.length) resolve(Math.round(sum));
+        else audio.src = album.songs[n++].audioUrl;
+      }
+      audio.addEventListener('loadedmetadata', function () {
+        sum += audio.duration;
+        resolveOrRecur();
+      });
+      resolveOrRecur();
+    });
+  };
+  return statsObj;
+});
+
+juke.controller('AlbumCtrl', function ($scope, $http, $rootScope, $log, StatsFactory) {
 
   // load our initial data
   $http.get('/api/albums/')
@@ -16,6 +37,10 @@ juke.controller('AlbumCtrl', function ($scope, $http, $rootScope, $log) {
       song.albumIndex = i;
     });
     $scope.album = album;
+    StatsFactory.totalTime(album)
+    .then(function(albumDuration) {
+      $scope.fullDuration = albumDuration;
+    })
   })
   .catch($log.error); // $log service can be turned on and off; also, pre-bound
 

@@ -1,13 +1,13 @@
 'use strict';
 
-juke.controller('AlbumCtrl', function ($scope, $rootScope, $log, 
-    StatsFactory, AlbumFactory, PlayerFactory) {
+juke.controller('AlbumCtrl', function ($scope, $rootScope, $log,
+                                       StatsFactory, AlbumFactory, PlayerFactory) {
 
   // load our initial data
   AlbumFactory.fetchAll()
   .then(function (albums) {
     return AlbumFactory.fetchById(albums[0].id);
-    })
+  })
   .then(function (album) {
     album.imageUrl = '/api/albums/' + album.id + '/image';
     album.songs.forEach(function (song, i) {
@@ -37,6 +37,10 @@ juke.controller('AlbumCtrl', function ($scope, $rootScope, $log,
   $scope.playing = function() {
     return PlayerFactory.isPlaying();
   };
+
+  $scope.$on('viewSwap', function (event, data) {
+    $scope.showMe = (data.name === 'oneAlbum');
+  });
 
 
 });

@@ -10,11 +10,11 @@ juke.controller('AlbumsCtrl', function ($scope, $rootScope, $log, AlbumFactory) 
     var songPromise = [];
     albums.forEach(function(album) {
       album.imageUrl = '/api/albums/' + album.id + '/image';
-
-      AlbumFactory.fetchById(album.id)
-      .then(function(alb) {
-        album.numSongs = alb.songs.length
-      })
+      album.numSongs = album.songs.length
+      // AlbumFactory.fetchById(album.id)
+      // .then(function(alb) {
+      //   album.numSongs = alb.songs.length
+      // })
     })
 
     $scope.albums = albums;
@@ -25,8 +25,8 @@ juke.controller('AlbumsCtrl', function ($scope, $rootScope, $log, AlbumFactory) 
     $scope.showMe = (data.name === 'allAlbums');
   });
 
-  $scope.viewOneAlbum = function () {
-    $rootScope.$broadcast('viewSwap', { name: 'oneAlbum' });
+  $scope.viewOneAlbum = function (albumId) {
+    $rootScope.$broadcast('viewSwap', { name: 'oneAlbum', albumId: albumId});
   };
 
 });

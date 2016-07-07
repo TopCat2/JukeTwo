@@ -14,6 +14,12 @@ juke.factory('AlbumFactory', function($http){
     .then(function (res) { return res.data; })
   }
 
+  factoryObj.setAudioUrl = function(song) {
+    song.audioUrl = '/api/songs/' + song.id + '/audio';
+  }
+
+
+
   return factoryObj;
 });
 

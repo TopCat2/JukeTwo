@@ -19,6 +19,7 @@ juke.controller('PlayerCtrl', function ($scope, $rootScope, PlayerFactory) {
   // main toggle
   $scope.toggle = function (song) {
     if (PlayerFactory.isPlaying()) PlayerFactory.pause();
+    else if(PlayerFactory.getCurrentSong()===song) PlayerFactory.resume()
     else PlayerFactory.start(song);
   };
 

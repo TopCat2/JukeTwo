@@ -13,6 +13,7 @@
   <script src="/js/player/player.controller.js" defer></script>
   <script src="/js/player/player.factory.js" defer></script>
   <script src="/js/sidebar/sidebar.controller.js" defer></script>
+  <script src="/js/song/song.factory.js" defer></script>
   <script src="/js/artist/artist.factory.js" defer></script>
   <script src="/js/artist/artist.controller.js" defer></script>
   <script src="/js/artist/singleArtist.controller.js" defer></script>
@@ -95,7 +96,7 @@
         <h4>ALBUMS</h4>
         <div class="row">
           <div class="col-xs-4" ng-repeat="album in albums">
-            <a class="thumbnail" href="#">
+            <a class="thumbnail" href="#" ng-click="viewAlbum(album.id)">
               <img ng-src="{{ album.imageUrl }}">
               <div class="caption">
                 <h5>

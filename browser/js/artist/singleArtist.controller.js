@@ -22,7 +22,6 @@ juke.controller('OneArtistCtrl', function ($scope, $rootScope, ArtistFactory, Al
         })
       })
       $scope.albums = albums;
-      console.log(albums)
       return ArtistFactory.fetchSongsById(artistId)
     })
     .then(function(songs) {
@@ -30,6 +29,10 @@ juke.controller('OneArtistCtrl', function ($scope, $rootScope, ArtistFactory, Al
       $scope.showMe = true;
     })
   })
+
+  $scope.viewAlbum = function(id) {
+    $rootScope.$broadcast("viewSwap", {name: 'oneAlbum', albumId: id})
+  }
 
    $scope.toggle = function (song) {
     if (PlayerFactory.isPlaying() && song === PlayerFactory.getCurrentSong()) {

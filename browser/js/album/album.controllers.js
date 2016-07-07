@@ -17,11 +17,6 @@ juke.controller('AlbumCtrl', function ($scope, $rootScope, $log,
 
     AlbumFactory.fetchById(data.albumId)
     .then(function (album) {
-      album.imageUrl = '/api/albums/' + album.id + '/image';
-      album.songs.forEach(function (song, i) {
-        song.audioUrl = '/api/songs/' + song.id + '/audio';
-        song.albumIndex = i;
-      });
       $scope.album = album;
       StatsFactory.totalTime(album)
       .then(function(albumDuration) {

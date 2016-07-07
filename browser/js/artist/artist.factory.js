@@ -1,6 +1,6 @@
 'use strict';
 
-juke.factory('ArtistFactory', function($http, AlbumFactory){
+juke.factory('ArtistFactory', function($http, SongFactory){
 
 var factoryObj = {};
 
@@ -23,8 +23,7 @@ factoryObj.fetchById = function(id) {
     return $http.get('/api/artists/' + id +'/songs') // temp: get one
     .then(function (res) {
       res.data.forEach(function(song) {
-        AlbumFactory.setAudioUrl(song)
-        console.log('AUDIOURLS:', song)
+        SongFactory.setAudioUrl(song)
       })
       return res.data; })
   }

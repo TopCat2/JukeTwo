@@ -1,27 +1,39 @@
 'use strict';
 
-juke.factory('AlbumFactory', function($http){
+juke.factory('AlbumFactory', function($http, SongFactory){
   // non-UI logic in here
   var factoryObj = {};
 
   factoryObj.fetchAll = function() {
     return $http.get('/api/albums/')
-    .then(function (res) { return res.data; })
+    .then(function (res) { 
+      res.data.forEach(function(album) {
+        factoryObj.decorateAlbum(album);
+      })
+      return res.data; 
+    })
   }
 
   factoryObj.fetchById = function(id) {
     return $http.get('/api/albums/' + id) // temp: get one
-    .then(function (res) { return res.data; })
+    .then(function (res) {
+      factoryObj.decorateAlbum(res.data);
+      return res.data; 
+    })
   }
 
-  factoryObj.setAudioUrl = function(song) {
-    song.audioUrl = '/api/songs/' + song.id + '/audio';
+  factoryObj.decorateAlbum = function(album) {
+    album.numSongs = album.songs.length;
+    album.imageUrl = '/api/albums/' + album.id + '/image';
+    album.songs.forEach(function (song, i) {
+      SongFactory.setAudioUrl(song);
+      song.albumIndex = i;
+    });
   }
-
-
 
   return factoryObj;
 });
+
 
 
 juke.factory('StatsFactory', function ($q) {
